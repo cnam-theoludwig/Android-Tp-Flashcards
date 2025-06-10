@@ -1,22 +1,26 @@
 package com.example.tp_flashcard.viewmodel
 
 import androidx.lifecycle.ViewModel
+import androidx.lifecycle.viewModelScope
 import com.example.tp_flashcard.model.FlashCardCategory
 import com.example.tp_flashcard.repository.FlashcardRepository
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.StateFlow
 import kotlinx.coroutines.flow.asStateFlow
+import kotlinx.coroutines.flow.collect
+import kotlinx.coroutines.launch
 
-class HomeViewModel : ViewModel() {
-    private val _categories = MutableStateFlow<List<FlashCardCategory>>(emptyList())
+data class HomeUiState(val categories: List<FlashCardCategory> = emptyList())
 
-    val categories: StateFlow<List<FlashCardCategory>> = _categories.asStateFlow()
+class HomeViewModel(private val repository: FlashcardRepository) : ViewModel() {
+    private val _uiState = MutableStateFlow(HomeUiState())
+    val uiState: StateFlow<HomeUiState> = _uiState.asStateFlow()
 
     init {
-        loadCategories()
-    }
-
-    private fun loadCategories() {
-        _categories.value = FlashcardRepository.categories
+        viewModelScope.launch {
+            repository.getAllCategories().collect { categories ->
+                _uiState.value = HomeUiState(categories = categories)
+            }
+        }
     }
 }

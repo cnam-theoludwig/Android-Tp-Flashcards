@@ -9,6 +9,8 @@ import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.StateFlow
 import kotlinx.coroutines.flow.asStateFlow
 import kotlinx.coroutines.flow.update
+import androidx.lifecycle.viewModelScope
+import kotlinx.coroutines.launch
 
 /**
  * Represents the UI state for the flashcard review screen.
@@ -20,7 +22,6 @@ import kotlinx.coroutines.flow.update
  * @property isReviewFinished Indicates whether the review session is complete.
  */
 data class FlashcardUiState(
-    val currentCategory: FlashCardCategory? = null,
     val flashcards: List<FlashCard> = emptyList(),
     val currentIndex: Int = 0,
     val isReviewFinished: Boolean = false,
@@ -38,25 +39,20 @@ data class FlashcardUiState(
 
 class FlashcardViewModel(
     savedStateHandle: SavedStateHandle,
+    private val repository: FlashcardRepository
 ) : ViewModel() {
 
-    private val categoryId: String = checkNotNull(savedStateHandle["categoryId"])
+    private val categoryId: String = savedStateHandle.get<String>("categoryId")!!
 
     private val _uiState = MutableStateFlow(FlashcardUiState())
     val uiState: StateFlow<FlashcardUiState> = _uiState.asStateFlow()
 
     init {
-        loadFlashcards()
-    }
-
-    private fun loadFlashcards() {
-        val category = FlashcardRepository.categories.find { it.id == categoryId }
-        val cards = FlashcardRepository.flashcards.filter { it.categoryId == categoryId }
-        _uiState.value = FlashcardUiState(
-            currentCategory = category,
-            flashcards = cards,
-            isReviewFinished = cards.isEmpty()
-        )
+        viewModelScope.launch {
+            repository.getFlashcardsForCategory(categoryId).collect { cards ->
+                _uiState.update { it.copy(flashcards = cards, isReviewFinished = cards.isEmpty()) }
+            }
+        }
     }
 
     /**
@@ -99,7 +95,7 @@ class FlashcardViewModel(
         _uiState.update {
             it.copy(
                 currentIndex = 0,
-                isReviewFinished = it.flashcards.isEmpty(),
+                isReviewFinished = false,
                 knownCardsCount = 0
             )
         }

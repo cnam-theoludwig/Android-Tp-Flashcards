@@ -19,7 +19,7 @@ fun AppNavHost(homeViewModel: HomeViewModel) {
             HomeScreen(
                 homeViewModel = homeViewModel,
                 onCategoryClick = { category ->
-                    navController.navigate("flashcard/${category.id}")
+                    navController.navigate("flashcard/$category")
                 }
             )
         }

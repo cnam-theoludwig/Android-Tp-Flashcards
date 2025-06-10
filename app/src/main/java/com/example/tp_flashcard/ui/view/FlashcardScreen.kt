@@ -22,6 +22,7 @@ import androidx.compose.runtime.*
 import kotlinx.coroutines.launch
 import androidx.compose.ui.Alignment
 import androidx.compose.foundation.background
+import androidx.compose.foundation.layout.width
 import androidx.compose.ui.Modifier
 import androidx.compose.foundation.shape.RoundedCornerShape
 
@@ -29,13 +30,14 @@ import androidx.compose.ui.graphics.graphicsLayer
 import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.unit.dp
 import androidx.lifecycle.viewmodel.compose.viewModel
+import com.example.tp_flashcard.viewmodel.AppViewModelProvider
 import com.example.tp_flashcard.model.FlashCard
 import com.example.tp_flashcard.viewmodel.FlashcardViewModel
 
 @Composable
 fun FlashcardScreen(
     onNavigateBack: () -> Unit,
-    flashcardViewModel: FlashcardViewModel = viewModel()
+    flashcardViewModel: FlashcardViewModel = viewModel(factory = AppViewModelProvider.Factory)
 ) {
     val uiState by flashcardViewModel.uiState.collectAsState()
 
@@ -72,12 +74,6 @@ fun ReviewScreen(
         horizontalAlignment = Alignment.CenterHorizontally,
         verticalArrangement = Arrangement.Center
     ) {
-        val progress = if (uiState.flashcards.isNotEmpty()) {
-            (uiState.currentIndex + 1) / uiState.flashcards.size.toFloat()
-        } else {
-            0f
-        }
-
         Column(modifier = Modifier.fillMaxWidth()) {
             Text(
                 text = uiState.progressText,
@@ -86,12 +82,15 @@ fun ReviewScreen(
                 color = MaterialTheme.colorScheme.onSurface.copy(alpha = 0.6f)
             )
             Spacer(modifier = Modifier.height(4.dp))
-            CustomProgressBar(
-                progress = progress,
-                modifier = Modifier
-                    .fillMaxWidth()
-                    .height(10.dp)
-            )
+            Box(modifier = Modifier.padding(horizontal = 16.dp)) {
+                SegmentedProgressBar(
+                    total = uiState.flashcards.size,
+                    current = uiState.currentIndex,
+                    modifier = Modifier
+                        .fillMaxWidth()
+                        .height(10.dp)
+                )
+            }
         }
 
         Box(
@@ -236,22 +235,24 @@ fun Flashcard(card: FlashCard) {
 }
 
 @Composable
-fun CustomProgressBar(progress: Float, modifier: Modifier = Modifier) {
-    Box(
-        modifier = modifier
-            .background(
-                color = MaterialTheme.colorScheme.primary.copy(alpha = 0.2f),
-                shape = RoundedCornerShape(5.dp)
-            )
+fun SegmentedProgressBar(total: Int, current: Int, modifier: Modifier = Modifier) {
+    Row(
+        modifier = modifier,
+        verticalAlignment = Alignment.CenterVertically
     ) {
-        Box(
-            modifier = Modifier
-                .fillMaxHeight()
-                .fillMaxWidth(fraction = progress)
-                .background(
-                    color = MaterialTheme.colorScheme.primary,
-                    shape = RoundedCornerShape(5.dp)
-                )
-        )
+        for (i in 0 until total) {
+            Box(
+                modifier = Modifier
+                    .weight(1f)
+                    .fillMaxHeight()
+                    .background(
+                        color = if (i <= current) MaterialTheme.colorScheme.primary else MaterialTheme.colorScheme.primary.copy(alpha = 0.2f),
+                        shape = RoundedCornerShape(5.dp)
+                    )
+            )
+            if (i < total - 1) {
+                Spacer(modifier = Modifier.width(6.dp))
+            }
+        }
     }
 }

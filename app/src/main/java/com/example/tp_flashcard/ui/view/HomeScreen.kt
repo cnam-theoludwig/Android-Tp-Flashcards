@@ -22,15 +22,17 @@ import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.unit.dp
+import androidx.lifecycle.viewmodel.compose.viewModel
 import com.example.tp_flashcard.model.FlashCardCategory
+import com.example.tp_flashcard.viewmodel.AppViewModelProvider
 import com.example.tp_flashcard.viewmodel.HomeViewModel
 
 @Composable
 fun HomeScreen(
-    homeViewModel: HomeViewModel,
-    onCategoryClick: (FlashCardCategory) -> Unit
+    onCategoryClick: (String) -> Unit,
+    homeViewModel: HomeViewModel = viewModel(factory = AppViewModelProvider.Factory)
 ) {
-    val categories by homeViewModel.categories.collectAsState()
+    val uiState by homeViewModel.uiState.collectAsState()
 
     Column (
         modifier = Modifier
@@ -51,10 +53,10 @@ fun HomeScreen(
             contentPadding = PaddingValues(horizontal = 16.dp),
             verticalArrangement = Arrangement.spacedBy(16.dp)
         ) {
-            items(categories) { category ->
+            items(uiState.categories) { category ->
                 CategoryButton(
                     category = category,
-                    onClick = { onCategoryClick(category) }
+                    onClick = { onCategoryClick(category.id) }
                 )
             }
         }
