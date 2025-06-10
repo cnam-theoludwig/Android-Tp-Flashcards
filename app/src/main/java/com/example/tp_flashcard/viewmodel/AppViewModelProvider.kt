@@ -22,5 +22,5 @@ object AppViewModelProvider {
     }
 }
 
-fun CreationExtras.flashcardApplication(): FlashcardApplication = 
+fun CreationExtras.flashcardApplication(): FlashcardApplication =
     (this[ViewModelProvider.AndroidViewModelFactory.APPLICATION_KEY] as FlashcardApplication)
