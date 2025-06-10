@@ -57,6 +57,13 @@ L'application FlashCard doit proposer les fonctionnalités suivantes :
 - Dans le fichier `README.md`, indiquez clairement le(s) nom(s) des participant(s).
 - **Date limite de rendu : vendredi 20 juin 2025 à 23h59.**
 
+## Exemples de l'application
+
+| Écran d'accueil                               | Écran de révision d'une catégorie              |
+| :-------------------------------------------- | :--------------------------------------------- |
+| ![image1](./image1.png)                       | ![image2](./image2.png)                        |
+| **FIGURE 1** Écran d'accueil de l'application | **FIGURE 2** Écran de révision d'une catégorie |
+
 ## 1. Prise en main du projet
 
 Vous allez commencer ce TP en récupérant un squelette d'application déjà préparé.
