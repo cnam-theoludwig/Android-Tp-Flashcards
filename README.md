@@ -6,6 +6,8 @@ Projet réalisé par [Théo LUDWIG](https://theoludwig.fr) dans le cadre de la f
 
 [SUJET](./SUJET.md)
 
+Pour tester l'application, un [APK est disponible](https://github.com/cnam-theoludwig/Android-Tp-Flashcards/releases/download/v1.0.0/app-release.apk).
+
 ## Prérequis
 
 [Android Studio](https://developer.android.com/studio) v2024.3.2
