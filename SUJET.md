@@ -38,7 +38,7 @@ L'application FlashCard doit proposer les fonctionnalités suivantes :
 ### 3. Navigation et animations
 
 - L'application doit utiliser le système de navigation Jetpack Compose (`NavHost`) pour gérer les différents écrans (accueil, session de révision).
-- Des animations doivent être présentes pour la rotation de la carte (question \( \rightarrow \) réponse) et pour la transition entre les cartes.
+- Des animations doivent être présentes pour la rotation de la carte (question => réponse) et pour la transition entre les cartes.
 - Une attention particulière est attendue sur la fluidité de l'expérience utilisateur.
 
 ## Critères de notation
@@ -61,7 +61,7 @@ L'application FlashCard doit proposer les fonctionnalités suivantes :
 
 | Écran d'accueil                               | Écran de révision d'une catégorie              |
 | :-------------------------------------------- | :--------------------------------------------- |
-| ![image1](./image1.png)                       | ![image2](./image2.png)                        |
+| ![image1](./sujet-image1.png)                 | ![image2](./sujet-image2.png)                  |
 | **FIGURE 1** Écran d'accueil de l'application | **FIGURE 2** Écran de révision d'une catégorie |
 
 ## 1. Prise en main du projet

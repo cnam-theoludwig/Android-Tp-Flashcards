@@ -15,11 +15,11 @@ import kotlinx.coroutines.launch
 /**
  * Represents the UI state for the flashcard review screen.
  *
- * @property currentCategory The category of the flashcards being reviewed.
+ *
  * @property flashcards The list of flashcards for the current session.
  * @property currentIndex The index of the currently displayed flashcard.
- * @property isFlipped Indicates whether the current flashcard is flipped to show the answer.
- * @property isReviewFinished Indicates whether the review session is complete.
+ * @property isReviewFinished Indicates whether the review session is finished.
+ * @property knownCardsCount The count of cards the user has marked as known.
  */
 data class FlashcardUiState(
     val flashcards: List<FlashCard> = emptyList(),
@@ -27,14 +27,11 @@ data class FlashcardUiState(
     val isReviewFinished: Boolean = false,
     val knownCardsCount: Int = 0
 ) {
-    val currentCard: FlashCard?
-        get() = flashcards.getOrNull(currentIndex)
-
     val progressText: String
         get() = if (flashcards.isNotEmpty() && !isReviewFinished) "${currentIndex + 1} / ${flashcards.size}" else ""
 
     val isLastCard: Boolean
-        get() = if (flashcards.isEmpty()) true else currentIndex == flashcards.size - 1
+        get() = flashcards.isEmpty() || currentIndex == flashcards.size - 1
 }
 
 class FlashcardViewModel(
@@ -68,23 +65,6 @@ class FlashcardViewModel(
                 val nextIndex = currentState.currentIndex + 1
                 currentState.copy(currentIndex = nextIndex, knownCardsCount = newKnownCount)
             }
-        }
-    }
-
-    /**
-     * Moves to the previous card in the list. This action resets the `isReviewFinished` flag if the user was at the end of the session.
-     */
-    fun onPreviousCard() {
-        _uiState.update { currentState ->
-            val prevIndex = if (currentState.currentIndex > 0) {
-                currentState.currentIndex - 1
-            } else {
-                0
-            }
-            currentState.copy(
-                currentIndex = prevIndex,
-                isReviewFinished = false
-            )
         }
     }
 

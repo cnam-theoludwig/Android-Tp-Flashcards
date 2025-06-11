@@ -39,8 +39,8 @@ class FlashcardRepository private constructor(private val flashcardDao: Flashcar
         private val initialFlashcards = listOf(
             // Jetpack Compose
             FlashCard(categoryId = "cat1", question = "Qu'est-ce qu'un 'Composable' ?", answer = "Une fonction qui décrit une partie de votre interface utilisateur."),
-            FlashCard(categoryId = "cat1", question = "Comment créer une rangée (Row) ?", answer = "En appelant la fonction composable `Row`."),
             FlashCard(categoryId = "cat1", question = "A quoi sert `State` dans Compose ?", answer = "A stocker une valeur qui, lorsqu'elle change, déclenche une recomposition des composables qui la lisent."),
+            FlashCard(categoryId = "cat1", question = "Qu'est ce que le MVVM ?", answer = "Model-View-ViewModel, un pattern d'architecture pour séparer la logique métier de l'interface utilisateur."),
 
             // Culture générale
             FlashCard(categoryId = "cat2", question = "Quelle est la capitale de l'Australie ?", answer = "Canberra."),
